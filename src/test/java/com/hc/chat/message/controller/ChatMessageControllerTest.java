@@ -49,14 +49,14 @@ public class ChatMessageControllerTest {
   }
 
   @Test
-  public void testParseWithTwoMentionsConcatenatedWithoutSpace() throws Exception {
-    Message message = new Message("@bob@john such a cool feature");
-    // PSQ: Given that a mention always starts with an '@' and ends when hitting a NON-WORD character,
-    //  is this a valid message,  "@luke@mary Hello, how are you"?
-    // If so, what should I return in this case given that they are not separated by non-word character?
-    assertEquals(
-        "",
-        "");
+  public void testErrorParseWithReallyLongInputMessage() throws Exception {
+    Message message = new Message("1234567890-1234567890-1234567890-1234567890-1234567890-1234567890-1234567890-1234567890-1234567890-1234567890-1234567890");
+    mvc.perform(MockMvcRequestBuilders.post("/chat/message/parse")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(mapper.writeValueAsString(message))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(equalTo("\"Message is too long.\"")));
   }
 
   @Test
@@ -122,7 +122,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
   }
 
   @Test
@@ -133,8 +133,10 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
   }
+
+
 
   @Test
   public void testEmptyParseWithOneLinkWithNoDomain() throws Exception {
@@ -177,6 +179,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[\"bob\",\"john\"],\"emoticons\":[\"success\"],\"links\":[{\"title\":Justin Dorfman on Twitter: &quot;nice @littlebigdetail from @HipChat (shows hex colors when pasted in chat). http://t.co/7cI6Gjy5pq&quot;}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[\"bob\",\"john\"],\"emoticons\":[\"success\"],\"links\":[{\"url\":\"https://twitter.com/jdorfman/status/430511497475670016\",\"title\":Justin Dorfman on Twitter: &quot;nice @littlebigdetail from @HipChat (shows hex colors when pasted in chat). http://t.co/7cI6Gjy5pq&quot;}]}")));
   }
 }
+

@@ -55,7 +55,7 @@ public class URLService {
         Document doc = Jsoup.connect(url).validateTLSCertificates(false).timeout(5000).get();
         title = StringEscapeUtils.escapeHtml(doc.title());
       } catch (SocketTimeoutException e) {
-        title = env.getProperty("WEBSITE_DOWN");
+        title = env.getProperty("WEBSITE_DOWN_TITLE");
       } catch (UnknownHostException e) {
         title = env.getProperty("UNKNOWN_WEBSITE_HOST_TITLE");
       } catch (IOException e) {
