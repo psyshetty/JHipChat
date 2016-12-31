@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
  */
 public class Link {
   private String url;
-  @JsonRawValue
+  //@JsonRawValue
   private String title;
 
   public Link() {}

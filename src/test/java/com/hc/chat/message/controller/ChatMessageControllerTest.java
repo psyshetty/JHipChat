@@ -122,7 +122,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
   }
 
   @Test
@@ -133,7 +133,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":2016 Rio Olympic Games | NBC Olympics}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
   }
 
 
@@ -179,7 +179,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[\"bob\",\"john\"],\"emoticons\":[\"success\"],\"links\":[{\"url\":\"https://twitter.com/jdorfman/status/430511497475670016\",\"title\":Justin Dorfman on Twitter: &quot;nice @littlebigdetail from @HipChat (shows hex colors when pasted in chat). http://t.co/7cI6Gjy5pq&quot;}]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[\"bob\",\"john\"],\"emoticons\":[\"success\"],\"links\":[{\"url\":\"https://twitter.com/jdorfman/status/430511497475670016\",\"title\":\"Justin Dorfman on Twitter: &quot;nice @littlebigdetail from @HipChat (shows hex colors when pasted in chat). http://t.co/7cI6Gjy5pq&quot;\"}]}")));
   }
 }
 
