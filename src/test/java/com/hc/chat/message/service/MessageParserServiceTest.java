@@ -1,35 +1,30 @@
 package com.hc.chat.message.service;
 
+import com.hc.chat.message.Application;
 import com.hc.chat.message.pojo.Link;
 import com.hc.chat.message.pojo.ParsedMessage;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.apache.commons.lang.builder.EqualsBuilder.*;
-import static org.junit.Assert.assertEquals;
+import static org.apache.commons.lang.builder.EqualsBuilder.reflectionEquals;
 
 /**
  * Created by ps on 12/26/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {Application.class})
 public class MessageParserServiceTest {
 
+  @Autowired
   MessageParserService parserService;
-
-  @Before
-  public void setUp() throws Exception {
-    parserService = new MessageParserService();
-  }
 
   @Test
   public void testParseWithOneMention() throws Exception {
@@ -38,19 +33,7 @@ public class MessageParserServiceTest {
   }
 
   @Test
-  public void testParseWithTwoMentionsConcatenatedWithoutSpace() throws Exception {
-    ParsedMessage parsedMessage = parserService.parse("@bob@john such a cool feature");
-    // PSQ: Given that a mention always starts with an '@' and ends when hitting a NON-WORD character,
-    //  is this a valid message,  "@luke@mary Hello, how are you"?
-    // If so, what should I return in this case given that they are not separated by non-word character?
-    assertEquals(
-        "",
-        "");
-  }
-
-  @Test
   public void testParseWithTwoEmoticons() throws Exception {
-    ParsedMessage parsedMessage = parserService.parse("Good morning! (megusta) (coffee)");
     ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), Arrays.asList("megusta","coffee"), new ArrayList<Link>());
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! (megusta) (coffee)")));
   }
@@ -96,6 +79,28 @@ public class MessageParserServiceTest {
     links.add(new Link("https://www.yahoo.com", "Yahoo"));
     ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
     ParsedMessage actualMessage = parserService.parse("Olympics are starting soon; https://www.yahoo.com");
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getEmoticons(),actualMessage.getEmoticons()));
+  }
+
+  @Test
+  public void testParseWithOneNOTFOUNDWebsiteLink() throws Exception {
+    List<Link> links = new ArrayList<Link>();
+    links.add(new Link("https://www.yahoo.com/ererrreer", "Unknown website host"));
+    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage actualMessage = parserService.parse("bad host url https://a.com");
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
+    Assert.assertTrue(reflectionEquals(expectedParsedMessage.getEmoticons(),actualMessage.getEmoticons()));
+  }
+
+  @Test
+  public void testParseWithOneInvalidWebsiteLink() throws Exception {
+    List<Link> links = new ArrayList<Link>();
+    links.add(new Link("https://a.com", "Unknown website host"));
+    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage actualMessage = parserService.parse("bad host url https://a.com");
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getEmoticons(),actualMessage.getEmoticons()));

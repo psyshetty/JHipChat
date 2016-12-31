@@ -90,7 +90,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"123456789012345\"],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"coffee\"],\"links\":[]}")));
   }
 
   @Test
@@ -112,7 +112,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"123456789012345\"],\"links\":[]")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
   }
 
   @Test
@@ -145,7 +145,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
   }
 
   @Test
@@ -156,7 +156,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
   }
 
   @Test
@@ -167,7 +167,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"links\": []}")));
+        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
   }
 
   @Test

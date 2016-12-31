@@ -2,14 +2,10 @@ package com.hc.chat.message.service;
 
 import com.hc.chat.message.pojo.Link;
 import com.hc.chat.message.pojo.ParsedMessage;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +18,8 @@ import java.util.regex.Pattern;
 @Service
 public class MessageParserService {
 
-  private UrlValidator urlValidator;
-  public HashMap<String, String> urlTitleMap;
-
-  public MessageParserService() {
-    String[] schemes = {"http","https"};
-    urlValidator = new UrlValidator(schemes);
-    urlTitleMap = new HashMap<>();
-  }
+  @Autowired
+  URLService urlService;
 
   public ParsedMessage parse(String s) throws Exception {
     ParsedMessage pm = new ParsedMessage(getMentions(s), getEmoticons(s), getLinks(s));
@@ -42,7 +32,6 @@ public class MessageParserService {
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
       String grp = matcher.group();
-      System.out.println(grp.substring(1));
       mentionList.add(grp.substring(1));
     }
     return mentionList;
@@ -54,29 +43,9 @@ public class MessageParserService {
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
       String grp = matcher.group();
-      System.out.println(grp.substring(1, grp.length() - 1));
       emoticonList.add(grp.substring(1, grp.length() - 1));
     }
     return emoticonList;
-  }
-
-  public String getTitle(String url) {
-    String title = null;
-    if (urlTitleMap.containsKey(url)) {
-      title = urlTitleMap.get(url);
-    } else {
-      try {
-        Document doc = Jsoup.connect(url).validateTLSCertificates(false).timeout(5000).get();
-        title = StringEscapeUtils.escapeHtml(doc.title());
-      } catch (HttpStatusException e) {
-        e.printStackTrace();
-      } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      urlTitleMap.put(url, title);
-    }
-    return title;
   }
 
   public List<Link> getLinks(String s) {
@@ -85,9 +54,8 @@ public class MessageParserService {
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
       String url = matcher.group();
-      if (urlValidator.isValid(url)) {
-        System.out.println("URL: " + url);
-        String title = getTitle(url);
+      if (urlService.isValidURL(url)) {
+        String title = urlService.getTitle(url);
         if (title != null) {
           links.add(new Link(url, title));
         }
