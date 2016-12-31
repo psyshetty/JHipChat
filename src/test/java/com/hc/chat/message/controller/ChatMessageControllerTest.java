@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hc.chat.message.pojo.Message;
-import com.hc.chat.message.pojo.ParsedMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

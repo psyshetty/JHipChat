@@ -5,9 +5,14 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -17,14 +22,23 @@ import java.util.HashMap;
  * Created by ps on 12/31/16.
  */
 @Service
+@PropertySource("classpath:jhipchat.properties")
 public class URLService {
+
+  @Autowired
+  private Environment env;
+
   private UrlValidator urlValidator;
   public HashMap<String, String> urlTitleMap;
 
   public URLService() {
-    String[] schemes = {"http","https"};
-    urlValidator = new UrlValidator(schemes);
     urlTitleMap = new HashMap<>();
+  }
+
+  @PostConstruct
+  public void init() {
+    String[] schemes = env.getProperty("VALID_URL_SCHEMES").split(",");
+    urlValidator = new UrlValidator(schemes);
   }
 
   public boolean isValidURL(String url) {
@@ -41,9 +55,9 @@ public class URLService {
         Document doc = Jsoup.connect(url).validateTLSCertificates(false).timeout(5000).get();
         title = StringEscapeUtils.escapeHtml(doc.title());
       } catch (SocketTimeoutException e) {
-        title = "Website down";
+        title = env.getProperty("WEBSITE_DOWN");
       } catch (UnknownHostException e) {
-        title = "Unknown website host";
+        title = env.getProperty("UNKNOWN_WEBSITE_HOST_TITLE");
       } catch (IOException e) {
         title = url;
       }
