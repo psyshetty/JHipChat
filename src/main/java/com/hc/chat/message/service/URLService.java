@@ -52,7 +52,7 @@ public class URLService {
     } else {
       try {
         // 5 second timeout
-        Document doc = Jsoup.connect(url).validateTLSCertificates(false).timeout(5000).get();
+        Document doc = Jsoup.connect(url).validateTLSCertificates(false).timeout(Integer.parseInt(env.getProperty("TITLE_TIMEOUT_IN_MILLIS"))).get();
         title = StringEscapeUtils.escapeHtml(doc.title());
       } catch (SocketTimeoutException e) {
         title = env.getProperty("WEBSITE_DOWN_TITLE");
