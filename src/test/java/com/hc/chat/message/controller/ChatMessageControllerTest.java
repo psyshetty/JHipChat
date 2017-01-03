@@ -45,7 +45,7 @@ public class ChatMessageControllerTest {
             .content(mapper.writeValueAsString(message))
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string(equalTo("{\"mentions\":[\"chris\"],\"emoticons\":[],\"links\":[]}")));
+            .andExpect(content().string(equalTo("{\"mentions\":[\"chris\"]}")));
   }
 
   @Test
@@ -67,7 +67,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"megusta\",\"coffee\"],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"emoticons\":[\"megusta\",\"coffee\"]}")));
   }
 
   @Test
@@ -78,7 +78,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"m\",\"coffee\"],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"emoticons\":[\"m\",\"coffee\"]}")));
   }
 
   @Test
@@ -89,7 +89,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"coffee\"],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"emoticons\":[\"coffee\"]}")));
   }
 
   @Test
@@ -100,7 +100,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[\"123456789012345\"],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{\"emoticons\":[\"123456789012345\"]}")));
   }
 
   @Test
@@ -111,7 +111,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{}")));
   }
 
   @Test
@@ -122,7 +122,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
+        .andExpect(content().string(equalTo("{\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
   }
 
   @Test
@@ -133,7 +133,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
+        .andExpect(content().string(equalTo("{\"links\":[{\"url\":\"http://www.nbcolympics.com\",\"title\":\"2016 Rio Olympic Games | NBC Olympics\"}]}")));
   }
 
 
@@ -146,7 +146,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{}")));
   }
 
   @Test
@@ -157,7 +157,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{}")));
   }
 
   @Test
@@ -168,7 +168,7 @@ public class ChatMessageControllerTest {
         .content(mapper.writeValueAsString(message))
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("{\"mentions\":[],\"emoticons\":[],\"links\":[]}")));
+        .andExpect(content().string(equalTo("{}")));
   }
 
   @Test

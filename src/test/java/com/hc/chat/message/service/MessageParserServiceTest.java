@@ -28,37 +28,37 @@ public class MessageParserServiceTest {
 
   @Test
   public void testParseWithOneMention() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(Arrays.asList("chris"), new ArrayList<String>(), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(Arrays.asList("chris"), null, null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("@chris you around?")));
   }
 
   @Test
   public void testParseWithTwoEmoticons() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), Arrays.asList("megusta","coffee"), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, Arrays.asList("megusta","coffee"), null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! (megusta) (coffee)")));
   }
 
   @Test
   public void testSuccessfulParseForMinEmoticonLength() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), Arrays.asList("me","coffee"), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, Arrays.asList("me","coffee"), null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! (me) (coffee)")));
   }
 
   @Test
   public void testEmptyParseForMinEmoticonLength() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), Arrays.asList("coffee"), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, Arrays.asList("coffee"), null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! () (coffee)")));
   }
 
   @Test
   public void testSuccessfulParseForMaxEmoticonLengthBoundary() throws Exception { //15chars
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), Arrays.asList("123456789012345"), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, Arrays.asList("123456789012345"), null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! () (123456789012345)")));
   }
 
   @Test
   public void testEmptyParseForMaxEmoticonLengthBoundary() throws Exception { //16chars
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("Good morning! () (1234567890123456)")));
   }
 
@@ -66,7 +66,7 @@ public class MessageParserServiceTest {
   public void testParseWithOneHttpLink() throws Exception {
     List<Link> links = new ArrayList<Link>();
     links.add(new Link("http://www.nbcolympics.com", "2016 Rio Olympic Games | NBC Olympics"));
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, links);
     ParsedMessage actualMessage = parserService.parse("Olympics are starting soon; http://www.nbcolympics.com");
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
@@ -77,7 +77,7 @@ public class MessageParserServiceTest {
   public void testParseWithOneHttpsLink() throws Exception {
     List<Link> links = new ArrayList<Link>();
     links.add(new Link("https://www.yahoo.com", "Yahoo"));
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, links);
     ParsedMessage actualMessage = parserService.parse("Olympics are starting soon; https://www.yahoo.com");
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
@@ -88,7 +88,7 @@ public class MessageParserServiceTest {
   public void testParseWithOneNOTFOUNDWebsiteLink() throws Exception {
     List<Link> links = new ArrayList<Link>();
     links.add(new Link("https://www.yahoo.com/ererrreer", "Unknown website host"));
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, links);
     ParsedMessage actualMessage = parserService.parse("bad host url https://a.com");
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
@@ -99,7 +99,7 @@ public class MessageParserServiceTest {
   public void testParseWithOneInvalidWebsiteLink() throws Exception {
     List<Link> links = new ArrayList<Link>();
     links.add(new Link("https://a.com", "Unknown website host"));
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), links);
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, links);
     ParsedMessage actualMessage = parserService.parse("bad host url https://a.com");
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getMentions(),actualMessage.getMentions()));
     Assert.assertTrue(reflectionEquals(expectedParsedMessage.getLinks(),actualMessage.getLinks()));
@@ -108,19 +108,19 @@ public class MessageParserServiceTest {
 
   @Test
   public void testEmptyParseWithOneLinkWithNoDomain() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("bad url https://a")));
   }
 
   @Test
   public void testEmptyParseWithOneLinkWithTooShortDomain() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("bad url https://a.a")));
   }
 
   @Test
   public void testEmptyParseWithOneLinkWithTooShortHostname() throws Exception {
-    ParsedMessage expectedParsedMessage = new ParsedMessage(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<Link>());
+    ParsedMessage expectedParsedMessage = new ParsedMessage(null, null, null);
     Assert.assertTrue(reflectionEquals(expectedParsedMessage,parserService.parse("bad url https://.a")));
   }
 

@@ -27,29 +27,31 @@ public class MessageParserService {
   }
 
   public List<String> getMentions(String s) {
-    List<String> mentionList = new ArrayList<>();
+    List<String> mentionList = null;
     Pattern pattern = Pattern.compile("@\\w+");
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
       String grp = matcher.group();
+      if (mentionList == null) mentionList = new ArrayList<>();
       mentionList.add(grp.substring(1));
     }
     return mentionList;
   }
 
   public List<String> getEmoticons(String s) {
-    List<String> emoticonList = new ArrayList<>();
+    List<String> emoticonList = null;
     Pattern pattern = Pattern.compile("\\([a-zA-Z0-9]{1,15}\\)");
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
       String grp = matcher.group();
+      if (emoticonList == null) emoticonList = new ArrayList<>();
       emoticonList.add(grp.substring(1, grp.length() - 1));
     }
     return emoticonList;
   }
 
   public List<Link> getLinks(String s) {
-    List<Link> links = new ArrayList<>();
+    List<Link> links = null;
     Pattern pattern = Pattern.compile("http(s?)://\\S+");
     Matcher matcher = pattern.matcher(s);
     while (matcher.find()) {
@@ -57,6 +59,7 @@ public class MessageParserService {
       if (urlService.isValidURL(url)) {
         String title = urlService.getTitle(url);
         if (title != null) {
+          if (links == null) links = new ArrayList<>();
           links.add(new Link(url, title));
         }
       }
